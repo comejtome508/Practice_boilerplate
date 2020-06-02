@@ -1,6 +1,7 @@
 // model의 schema를 만들기
 
 const mongoose = require('mongoose');
+//비밀번호를 암호화하기 위한 것
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
@@ -40,7 +41,7 @@ const userSchema = mongoose.Schema({
   },
 });
 
-//user에서 save 하러 가기 전에 이 것을 꼭 수행하도록 한다
+//user에서 정보를 저장하기 전에 이 것을 꼭 수행하도록 한다
 //비밀번호를 바꿀 때만 암호화를 하도록 한다
 userSchema.pre('save', function (next) {
   var user = this;
@@ -51,6 +52,7 @@ userSchema.pre('save', function (next) {
       bcrypt.hash(user.password, salt, function (err, hash) {
         if (err) return next(err);
         user.password = hash;
+        //위의 함수를 모두 실행하고나서 index.js의 save로 이동해서 수행함
         next();
       });
     });
@@ -62,7 +64,8 @@ userSchema.pre('save', function (next) {
 userSchema.methods.comparePassword = function (plainPassword, cb) {
   //plainpassword를 암호화해서 암호화된 비밀번호와 비교해야 한다.
   bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
-    if (err) return cb(err), cb(null, isMatch);
+    if (err) return cb(err);
+    cb(null, isMatch);
   });
 };
 
