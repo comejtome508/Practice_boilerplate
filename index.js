@@ -1,20 +1,21 @@
 //express 모듈을 가져옴
-const express = require("express");
+const express = require('express');
 //function을 이용해서 새로운 app을 만들어줌
 const app = express();
 const port = 5000;
-const bodyParser = require("body-parser");
-const { auth } = require("./middleware/auth");
-const { User } = require("./models/User");
-const config = require("./config/key");
-const cookieParser = require("cookie-parser");
-
+const bodyParser = require('body-parser');
+const { auth } = require('./middleware/auth');
+const { User } = require('./models/User');
+//mongoURI를 가져오기 위해서
+const config = require('./config/key');
+const cookieParser = require('cookie-parser');
+//bodyParser가 server에서 온 것을 분석할 수 있게
 app.use(bodyParser.urlencoded({ extended: true }));
-
+//json 타입으로 된 것을 분석할 수 있게
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 mongoose
   .connect(config.mongoURI, {
     useNewUrlParser: true,
@@ -22,24 +23,26 @@ mongoose
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then(() => console.log("MongoDB Connectd..."))
+  .then(() => console.log('MongoDB Connectd...'))
   .catch((err) => console.log(err));
 
-app.get("/", (req, res) => res.send("Hello world!"));
+app.get('/', (req, res) => res.send('Hello world!'));
 
-// app.post("/api/users/register", (req, res) => {
-//   // 회원 가입 할 때 필요한 정보들을 client에서 가져오면
-//   // 그것들을 데이터 베이스에 넣어준다.
+app.post('/api/users/register', (req, res) => {
+  // 회원 가입 할 때 필요한 정보들을 client에서 가져오면
+  // 그것들을 데이터 베이스에 넣어준다.
 
-//   const user = new User(req.body);
-
-//   user.save((err, userInfo) => {
-//     if (err) return res.json({ success: false, err });
-//     return res.status(200).json({
-//       success: true,
-//     });
-//   });
-// });
+  //인스턴스를 만듬
+  //bodyParser가 있어서 client로부터 req 정보를 받아준다
+  const user = new User(req.body);
+  // mongodb
+  user.save((err, userInfo) => {
+    if (err) return res.json({ success: false, err });
+    return res.status(200).json({
+      success: true,
+    });
+  });
+});
 
 // app.post("/api/users/login", (req, res) => {
 //   // 요청된 이메일을 데이터베이스에서 있는지 찾는다.
