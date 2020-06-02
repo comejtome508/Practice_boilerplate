@@ -3,10 +3,9 @@ const express = require('express');
 //function을 이용해서 새로운 app을 만들어줌
 const app = express();
 const port = 5000;
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-//mongoURI를 가져오기 위해서
-const config = require('./config/key');
+//mongoURI를 가져오기 위해서, 암호화
+const config = require('./server/config/key');
 const cookieParser = require('cookie-parser');
 const { auth } = require('./middleware/auth');
 const { User } = require('./models/User');
@@ -16,14 +15,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+const mongoose = require('mongoose');
 mongoose
   .connect(config.mongoURI, {
     useNewUrlParser: true,
-    useUnifieldTopology: true,
+    useUnifiedTopology: true,
     useCreateIndex: true,
-    useFinAndModify: false,
+    useFindAndModify: false,
   })
-  .then(() => console.log('MongoDB Connectd...'))
+  .then(() => console.log('MongoDB Connected...'))
   .catch((err) => console.log(err));
 
 app.get('/', (req, res) => res.send('Hello world!'));
@@ -34,6 +34,7 @@ app.post('/api/users/register', (req, res) => {
 
   //인스턴스를 만듬
   //bodyParser가 있어서 client로부터 req 정보를 받아준다
+  // bodyParser에 대해서 한번 더 알아보기
   const user = new User(req.body);
   // mongodb
   user.save((err, userInfo) => {
