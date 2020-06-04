@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "devstart": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/index.js",
+    "backend": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\""
   },
   "author": "youngnoh Goh",
   "license": "ISC",
@@ -19,14 +20,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/comejtome508/Publishing_Practice01_Megabox.git"
-  },
-  "bugs": {
-    "url": "https://github.com/comejtome508/Publishing_Practice01_Megabox/issues"
-  },
-  "homepage": "https://github.com/comejtome508/Publishing_Practice01_Megabox#readme",
-  "description": ""
+  }
 }
