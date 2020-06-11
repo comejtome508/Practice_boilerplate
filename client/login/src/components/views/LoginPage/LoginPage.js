@@ -3,9 +3,13 @@ import Axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../_actions/user_action';
 
+//안에서 값을 바꾸기 위해서는 state를 만들어줘야 하는데
+//email을 위한 state과 password를 위한 state이 각각 필요하다
+
 function LoginPage(props) {
   const dispatch = useDispatch();
 
+  //server에 보낼 값들을 state에서 받고 있다
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
 
@@ -18,13 +22,14 @@ function LoginPage(props) {
   };
 
   const onSubmitHandler = (event) => {
+    //
     event.preventDefault();
 
     let body = {
       email: Email,
       password: Password,
     };
-
+    //axios를 쓰지 않고 redux를 쓰기로 함
     dispatch(loginUser(body)).then((response) => {
       if (response.payload.loginSuccess) {
         props.history.push('/');
@@ -54,7 +59,7 @@ function LoginPage(props) {
         <input type='password' value={Password} onChange={onPasswordHandler} />
 
         <br />
-        <button>Login</button>
+        <button type='submit'>Login</button>
       </form>
     </div>
   );

@@ -14,7 +14,7 @@ const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,
   ReduxThunk
 )(createStore);
-
+// redux를 연결시키기
 ReactDOM.render(
   <Provider
     store={createStoreWithMiddleware(
