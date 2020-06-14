@@ -8,7 +8,7 @@ export function loginUser(dataToSubmit) {
 
   //reducer로 보내줘야 함
   return {
-    type: REGISTER_USER,
+    type: LOGIN_USER,
     payload: request,
   };
 }
@@ -19,7 +19,7 @@ export function registerUser(dataToSubmit) {
     .then((response) => response.data);
 
   return {
-    type: LOGIN_USER,
+    type: REGISTER_USER,
     payload: request,
   };
 }
